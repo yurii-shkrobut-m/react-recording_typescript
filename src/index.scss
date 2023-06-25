@@ -1,0 +1,16 @@
+html {
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+}
+
+.box {
+  display: flex;
+  gap: 5px;
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #ddd;
+}
+
+.box--active {
+  background-color: #bbb;
+}
