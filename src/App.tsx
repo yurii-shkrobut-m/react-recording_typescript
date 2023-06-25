@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Counter } from './Counter';
 
 export const App = () => {
   const [history, setHistory] = useState<number[]>([]);
@@ -27,11 +28,10 @@ export const App = () => {
         {query}
       </div>
 
-      <div className="box">
-        <button onClick={() => saveCount(count - 1)}>-</button>
-        {count}
-        <button onClick={() => saveCount(count + 1)}>+</button>
-      </div>
+      <Counter
+        value={count}
+        onChange={saveCount}
+      />
 
       <div className="box">
         {history.join(', ') || 'No history yet'}
