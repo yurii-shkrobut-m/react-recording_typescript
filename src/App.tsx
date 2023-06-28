@@ -1,41 +1,12 @@
-import React, { useState } from 'react';
-import { Counter } from './Counter';
+import React from 'react';
+import { PostForm } from './PostForm';
 
-export const App = () => {
-  const [history, setHistory] = useState<number[]>([]);
-  const [count, setCount] = useState(0);
-  const [query, setQuery] = useState('');
-
-  function saveCount(value: number) {
-    setCount(value);
-    setHistory(currentHistory => [...currentHistory, value]);
-  }
-
-  const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(event.target.value);
-  };
-
+export const App: React.FC = () => {
   return (
     <div className="App">
-      <h1>Mate academy {count} </h1>
+      <h1>Create a post</h1>
 
-      <div className="box">
-        <input 
-          type="text" 
-          onChange={handleQueryChange}
-        />
-
-        {query}
-      </div>
-
-      <Counter
-        value={count}
-        onChange={saveCount}
-      />
-
-      <div className="box">
-        {history.join(', ') || 'No history yet'}
-      </div>
+      <PostForm />
     </div>
   );
 };
