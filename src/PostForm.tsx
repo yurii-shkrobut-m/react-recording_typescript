@@ -1,66 +1,94 @@
+import classNames from 'classnames';
 import React, { useState } from 'react';
 
 export const PostForm: React.FC = () => {
-  const [userId, setUserId] = useState(0);
-  const [title, setTitle] = useState('Post 1');
-  const [isBodyShown, setIsBodyShown] = useState(false);
+  const [title, setTitle] = useState('');
+  const [hasTitleError, setHasTitleError] = useState(false);
 
-  const handleTilteChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const [userId, setUserId] = useState(0);
+  const [body, setBody] = useState('');
+
+  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
-    // setIsBodyShown(false);
+    setHasTitleError(false);
+  }
+
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+
+    if (!title) {
+      setHasTitleError(true);
+      return;
+    }
   };
 
   return (
-    <form action="/api/posts" method="POST">
-      <label className="field">
-        Title:&nbsp;&nbsp;
-
-        <input
-          type="text"
-          value={title}
-          onChange={handleTilteChange}
-        />
-      </label>
-
+    <form 
+      action="/api/posts" 
+      method="POST" 
+      className="box"
+      onSubmit={handleSubmit}
+    >
       <div className="field">
-        <label htmlFor="user-id">User: </label>
+        <label className="label" htmlFor="post-title">Title</label>
 
-        <select 
-          id="user-id" 
-          required 
-          value={userId}
-          onChange={event => setUserId(+event.target.value)}
-        >
-          <option value="0" disabled>Please choose a user</option>
+        <div className={classNames('control', {
+          'has-icons-right': hasTitleError,
+        })}>
+          <input
+            id="post-title"
+            className={classNames('input', {
+              'is-danger': hasTitleError
+            })} 
+            type="text" 
+            placeholder="Email input" 
+            value={title}
+            onChange={handleTitleChange}
+          />
 
-          <option value="1">Leanne Graham</option>
-          <option value="2">Ervin Howell</option>
-          <option value="3">Clementine Bauch</option>
-          <option value="4">Patricia Lebsack</option>
-          <option value="5">Chelsey Dietrich</option>
-        </select>
+          {hasTitleError && (
+            <span className="icon is-small is-right">
+              <i className="fas fa-exclamation-triangle has-text-danger"></i>
+            </span>
+          )}
+        </div>
 
-        {userId}
+        {hasTitleError && (
+          <p className="help is-danger">Title is required</p>
+        )}
       </div>
 
-      <label className="field">
-        <input
-          type="checkbox"
-          checked={isBodyShown}
-          onChange={event => setIsBodyShown(event.target.checked)}
-        />
-        I want to enter post text
-      </label>
+      <div className="field">
+        <label className="label">Subject</label>
+        <div className="control has-icons-left">
+          <div className="select">
+            <select>
+              <option>Select dropdown</option>
+              <option>With options</option>
+            </select>
+          </div>
+          <span className="icon is-small is-left">
+            <i className="fas fa-user"></i>
+          </span>
+        </div>
+      </div>
 
-      {isBodyShown && (
-        <textarea 
-          className="field" 
-          value={title}
-          onChange={event => setTitle(event.target.value)}
-        />
-      )}
+      <div className="field">
+        <label className="label">Message</label>
+        <div className="control">
+          <textarea className="textarea" placeholder="Textarea"></textarea>
+        </div>
+      </div>
 
-      <button type="submit">Create</button>
+      <div className="buttons">
+        <button type="submit" className="button is-link">
+          Submit
+        </button>
+
+        <button type="reset" className="button is-link is-light">
+          Cancel
+        </button>
+      </div>
     </form>
   );
 };
