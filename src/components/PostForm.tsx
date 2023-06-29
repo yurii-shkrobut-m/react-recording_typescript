@@ -1,38 +1,59 @@
 import classNames from 'classnames';
 import React, { useState } from 'react';
+import usersFromServer from '../api/users.json';
+import { Post } from '../types/Post';
+import { getUserById } from '../services/user';
 
-export const PostForm: React.FC = () => {
+type Props = {
+  onSubmit: (post: Post) => void;
+}
+
+export const PostForm: React.FC<Props> = ({ onSubmit }) => {
+  // #region state
   const [title, setTitle] = useState('');
-  const [hasTitleError, setHasTitleError] = useState(true);
+  const [hasTitleError, setHasTitleError] = useState(false);
 
   const [userId, setUserId] = useState(0);
-  const [hasUserIdError, setHasUserIdError] = useState(true);
+  const [hasUserIdError, setHasUserIdError] = useState(false);
   
   const [body, setBody] = useState('');
-  const [hasBodyError, setHasBodyError] = useState(true);
-
+  const [hasBodyError, setHasBodyError] = useState(false);
+  // #endregion
+  // #region change handlers
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
     setHasTitleError(false);
   };
 
   const handleUserIdChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setTitle(event.target.value);
-    setHasTitleError(false);
+    setUserId(+event.target.value);
+    setHasUserIdError(false);
   };
 
   const handleBodyChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setTitle(event.target.value);
-    setHasTitleError(false);
+    setBody(event.target.value);
+    setHasBodyError(false);
   };
+  // #endregion
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (!title) {
-      setHasTitleError(true);
+    setHasTitleError(!title);
+    setHasUserIdError(!userId);
+    setHasBodyError(!body);
+
+    if (!title || !userId || !body) {
       return;
     }
+
+    onSubmit({
+      id: 0,
+      title,
+      body,
+      userId,
+      user: getUserById(userId),
+    });
   };
 
   return (
@@ -88,6 +109,12 @@ export const PostForm: React.FC = () => {
               onChange={handleUserIdChange}
             >
               <option value="0" disabled>Select a user</option>
+
+              {usersFromServer.map(user => (
+                <option value={user.id} key={user.id}>
+                  {user.name}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -118,7 +145,7 @@ export const PostForm: React.FC = () => {
         </div>
 
         {hasBodyError && (
-          <p className="help is-danger">Please select a user</p>
+          <p className="help is-danger">Please enter some message</p>
         )}
       </div>
 
