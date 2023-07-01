@@ -1,12 +1,13 @@
+// #region imports
 import classNames from 'classnames';
 import React, { useState } from 'react';
-import usersFromServer from '../api/users.json';
 import { Post } from '../types/Post';
-import { getUserById } from '../services/user';
+import { getAllUsers, getUserById } from '../services/user';
 
 type Props = {
   onSubmit: (post: Post) => void;
-}
+};
+// #endregion
 
 export const PostForm: React.FC<Props> = ({ onSubmit }) => {
   // #region state
@@ -19,7 +20,7 @@ export const PostForm: React.FC<Props> = ({ onSubmit }) => {
   const [body, setBody] = useState('');
   const [bodyErrorMessage, setBodyErrorMessage] = useState('');
   // #endregion
-  // #region change handlers
+  // #region handlers
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
     setHasTitleError(false);
@@ -35,7 +36,7 @@ export const PostForm: React.FC<Props> = ({ onSubmit }) => {
     setBodyErrorMessage('');
   };
   // #endregion
-
+  // #region submit
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
@@ -62,7 +63,8 @@ export const PostForm: React.FC<Props> = ({ onSubmit }) => {
 
     reset();
   };
-
+  // #endregion
+  // #region reset
   const reset = () => {
     setTitle('');
     setUserId(0);
@@ -72,6 +74,7 @@ export const PostForm: React.FC<Props> = ({ onSubmit }) => {
     setHasUserIdError(false);
     setBodyErrorMessage('');
   };
+  // #endregion
 
   return (
     <form 
@@ -81,6 +84,8 @@ export const PostForm: React.FC<Props> = ({ onSubmit }) => {
       onSubmit={handleSubmit}
       onReset={reset}
     >
+      <h2 className="title is-4">Create a post</h2>
+
       <div className="field">
         <label className="label" htmlFor="post-title">
           Title
@@ -131,7 +136,7 @@ export const PostForm: React.FC<Props> = ({ onSubmit }) => {
             >
               <option value="0">Select a user</option>
 
-              {usersFromServer.map(user => (
+              {getAllUsers().map(user => (
                 <option value={user.id} key={user.id}>
                   {user.name}
                 </option>

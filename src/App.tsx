@@ -2,45 +2,51 @@
 import React, { useState } from 'react';
 
 import { Post } from './types/Post';
-import postsFromServer from './api/posts.json';
-import { getUserById } from './services/user';
-
+import { getMaxId, getPreparedPosts } from './services/posts';
 import { PostForm } from './components/PostForm';
 import { PostList } from './components/PostList';
 // #endregion
 
-const initialPosts: Post[] = postsFromServer.map(post => ({
-  ...post,
-  user: getUserById(post.userId),
-}));
-
-function getNewPostId(posts: Post[]) {
-  const maxId = Math.max(
-    ...posts.map(post => post.id),
-  );
-
-  return maxId + 1;
-  // return +Math.random().toFixed(12).slice(2);
-}
-
 export const App: React.FC = () => {
-  const [posts, setPosts] = useState<Post[]>(initialPosts);
+  // #region query
+  const [query, setQuery] = useState('');
+
+  const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(event.target.value);
+  }
+  // #endregion
+  // #region posts
+  const [posts, setPosts] = useState<Post[]>(getPreparedPosts());
 
   const addPost = (post: Post) => {
     const newPost = {
       ...post,
-      id: getNewPostId(posts),
+      id: getMaxId(posts) + 1,
     };
 
     setPosts(currentPosts => [newPost, ...currentPosts]);
   };
+  // #endregion
 
   return (
-    <div className="section">
-      <h1 className="title">Create a post</h1>
+    <div className="section py-5">
+      <div className="columns is-mobile">
+        <div className="column">
+          <h1 className="title">Posts</h1>
+        </div>
 
-      <PostForm onSubmit={addPost} />
+        <div className="column">
+          <input
+            type="text"
+            className="input is-rounded"
+            value={query}
+            onChange={handleQueryChange}
+          />
+        </div>
+      </div>
+
       <PostList posts={posts} />
-    </div>
+      {/* <PostForm onSubmit={addPost} /> */}
+      </div>
   );
 };
