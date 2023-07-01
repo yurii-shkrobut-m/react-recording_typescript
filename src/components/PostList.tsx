@@ -32,9 +32,11 @@ export const PostList: React.FC<Props> = React.memo((({ posts }) => {
               </button> */}
             </td>
             <td>
-              {/* <button className="icon button is-inverted is-danger">
+              <button
+                className="icon button is-inverted is-danger"
+              >
                 <i className="fas fa-xmark"></i>
-              </button> */}
+              </button>
             </td>
           </tr>
         ))}

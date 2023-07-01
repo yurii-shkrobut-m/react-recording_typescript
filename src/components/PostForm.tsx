@@ -3,21 +3,22 @@ import classNames from 'classnames';
 import React, { useState } from 'react';
 import { Post } from '../types/Post';
 import { getAllUsers, getUserById } from '../services/user';
+// #endregion
 
 type Props = {
   onSubmit: (post: Post) => void;
+  post?: Post
 };
-// #endregion
 
-export const PostForm: React.FC<Props> = ({ onSubmit }) => {
+export const PostForm: React.FC<Props> = ({ onSubmit, post  }) => {
   // #region state
-  const [title, setTitle] = useState('');
+  const [title, setTitle] = useState(post?.title || '');
   const [hasTitleError, setHasTitleError] = useState(false);
 
-  const [userId, setUserId] = useState(0);
+  const [userId, setUserId] = useState(post?.userId || 0);
   const [hasUserIdError, setHasUserIdError] = useState(false);
   
-  const [body, setBody] = useState('');
+  const [body, setBody] = useState(post?.body || '');
   const [bodyErrorMessage, setBodyErrorMessage] = useState('');
   // #endregion
   // #region handlers

@@ -30,15 +30,13 @@ export const App: React.FC = () => {
   // #endregion
 
   const filteredPosts = useMemo(() => {
-    return posts.filter(post => post.title.includes(query));
+    return posts.filter(
+      post => post.title.includes(query)
+    );
   }, [query, posts]);
 
   return (
     <div className="section py-5">
-      <button onClick={() => setCount(x => x + 1)}>
-        {count}
-      </button>
-
       <div className="columns is-mobile">
         <div className="column">
           <h1 className="title">Posts</h1>
@@ -54,8 +52,9 @@ export const App: React.FC = () => {
         </div>
       </div>
 
+      <button onClick={() => setCount(x => x + 1)}>{count}</button>
       <PostList posts={filteredPosts} />
       <PostForm onSubmit={addPost} />
-      </div>
+    </div>
   );
 };
