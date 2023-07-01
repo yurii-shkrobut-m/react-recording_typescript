@@ -1,5 +1,5 @@
 // #region imports 
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import { Post } from './types/Post';
 import { getMaxId, getPreparedPosts } from './services/posts';
@@ -19,20 +19,24 @@ export const App: React.FC = () => {
   // #region posts
   const [posts, setPosts] = useState<Post[]>(getPreparedPosts());
 
-  const addPost = (post: Post) => {
-    const newPost = {
-      ...post,
-      id: getMaxId(posts) + 1,
-    };
+  const addPost = useCallback((post: Post) => {
+    setPosts(currentPosts => {
+      const newPost = {
+        ...post,
+        id: getMaxId(currentPosts) + 1,
+      };
+  
+      return [...currentPosts, newPost];
+    });
+  }, []);
 
-    setPosts(currentPosts => [...currentPosts, newPost]);
-  };
+  const deletePost = useCallback((postId: number) => {
+    setPosts(currentPosts => currentPosts.filter(post => post.id !== postId));
+  }, []);
   // #endregion
 
   const filteredPosts = useMemo(() => {
-    return posts.filter(
-      post => post.title.includes(query)
-    );
+    return posts.filter(post => post.title.includes(query));
   }, [query, posts]);
 
   return (
@@ -53,7 +57,7 @@ export const App: React.FC = () => {
       </div>
 
       <button onClick={() => setCount(x => x + 1)}>{count}</button>
-      <PostList posts={filteredPosts} />
+      <PostList posts={filteredPosts} onDelete={deletePost} />
       <PostForm onSubmit={addPost} />
     </div>
   );

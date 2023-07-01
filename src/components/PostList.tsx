@@ -3,9 +3,10 @@ import { Post } from '../types/Post';
 
 type Props = {
   posts: Post[];
+  onDelete: (id: number) => void;
 };
 
-export const PostList: React.FC<Props> = React.memo((({ posts }) => {
+export const PostList: React.FC<Props> = React.memo((({ posts, onDelete }) => {
   console.log('rendering PostList');
 
   return (
@@ -21,7 +22,7 @@ export const PostList: React.FC<Props> = React.memo((({ posts }) => {
       </thead>
   
       <tbody>
-        {posts.map((post, i) => (
+        {posts.map(post => (
           <tr key={post.id}>
             <td>{post.id}</td>
             <td >{post.title}</td>
@@ -34,6 +35,7 @@ export const PostList: React.FC<Props> = React.memo((({ posts }) => {
             <td>
               <button
                 className="icon button is-inverted is-danger"
+                onClick={() => onDelete(post.id)}
               >
                 <i className="fas fa-xmark"></i>
               </button>
