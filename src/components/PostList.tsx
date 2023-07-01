@@ -3,12 +3,15 @@ import { Post } from '../types/Post';
 
 type Props = {
   posts: Post[];
-  onDelete: (id: number) => void;
+  onDelete?: (id: number) => void;
+  onSelect?: (post: Post) => void;
 };
 
-export const PostList: React.FC<Props> = React.memo((({ posts, onDelete }) => {
-  console.log('rendering PostList');
-
+export const PostList: React.FC<Props> = React.memo((({
+  posts, 
+  onDelete = () => {}, 
+  onSelect = () => {},
+}) => {
   return (
     <table className="table is-striped is-narrow box">
       <thead>
@@ -28,9 +31,12 @@ export const PostList: React.FC<Props> = React.memo((({ posts, onDelete }) => {
             <td >{post.title}</td>
             <td>{post.user?.username}</td>
             <td>
-              {/* <button className="icon button is-inverted is-info">
+              <button
+                className="icon button is-inverted is-info"
+                onClick={() => onSelect(post)}
+              >
                 <i className="fas fa-pen"></i>
-              </button> */}
+              </button>
             </td>
             <td>
               <button

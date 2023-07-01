@@ -7,10 +7,12 @@ import { getAllUsers, getUserById } from '../services/user';
 
 type Props = {
   onSubmit: (post: Post) => void;
-  post?: Post
+  post?: Post;
 };
 
-export const PostForm: React.FC<Props> = ({ onSubmit, post  }) => {
+export const PostForm: React.FC<Props> = ({ onSubmit, post }) => {
+  console.log('render PostForm', post?.id);
+  
   // #region state
   const [title, setTitle] = useState(post?.title || '');
   const [hasTitleError, setHasTitleError] = useState(false);
@@ -55,7 +57,7 @@ export const PostForm: React.FC<Props> = ({ onSubmit, post  }) => {
     }
 
     onSubmit({
-      id: 0,
+      id: post?.id || 0,
       title,
       body,
       userId,
