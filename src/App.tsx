@@ -9,7 +9,6 @@ import { PostList } from './components/PostList';
 
 export const App: React.FC = () => {
   // #region query
-  const [count, setCount] = useState(0);
   const [query, setQuery] = useState('');
 
   const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,7 +28,7 @@ export const App: React.FC = () => {
         ...post,
         id: getMaxId(currentPosts) + 1,
       };
-  
+
       return [...currentPosts, newPost];
     });
   }, []);
@@ -37,8 +36,6 @@ export const App: React.FC = () => {
   const deletePost = useCallback((postId: number) => {
     setPosts(currentPosts => currentPosts.filter(post => post.id !== postId));
   }, []);
-  // #endregion
-  const [selectedPost, setSelectedPost] = useState<Post | null>(null);
 
   const updatePost = useCallback((updatedPost: Post) => {
     setPosts(currentPosts => {
@@ -50,11 +47,11 @@ export const App: React.FC = () => {
       return newPosts;
     });
   }, []);
+  // #endregion
+  const [selectedPost, setSelectedPost] = useState<Post | null>(null);
 
   return (
     <div className="section py-5">
-      <button onClick={() => setCount(x => x + 1)}>{count}</button>
-      {selectedPost?.id}
       <div className="columns is-mobile">
         <div className="column">
           <h1 className="title">Posts</h1>
@@ -62,6 +59,7 @@ export const App: React.FC = () => {
 
         <div className="column">
           <input
+            autoFocus
             type="text"
             className="input is-rounded"
             value={query}
@@ -72,12 +70,18 @@ export const App: React.FC = () => {
 
       <PostList
         posts={filteredPosts}
+        selectedPostId={selectedPost?.id}
         onDelete={deletePost}
         onSelect={setSelectedPost}
       />
 
       {selectedPost ? (
-        <PostForm onSubmit={updatePost} post={selectedPost} key={selectedPost.id} />
+        <PostForm
+          key={selectedPost.id}
+          post={selectedPost}
+          onSubmit={updatePost}
+          onReset={() => setSelectedPost(null)}
+        />
       ) : (
         <PostForm onSubmit={addPost} />
       )}

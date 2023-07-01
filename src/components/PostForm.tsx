@@ -1,17 +1,30 @@
 // #region imports
 import classNames from 'classnames';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Post } from '../types/Post';
 import { getAllUsers, getUserById } from '../services/user';
 // #endregion
 
 type Props = {
   onSubmit: (post: Post) => void;
+  onReset?: () => void;
   post?: Post;
 };
 
-export const PostForm: React.FC<Props> = ({ onSubmit, post }) => {
-  console.log('render PostForm', post?.id);
+export const PostForm: React.FC<Props> = ({ 
+  onSubmit, 
+  post, 
+  onReset = () => {},
+}) => {
+  const titleField = useRef<HTMLInputElement>(null);
+
+  console.log(titleField.current);
+
+  useEffect(() => {
+    if (titleField.current && post) {
+      titleField.current.focus();
+    }
+  }, [post?.id]);
   
   // #region state
   const [title, setTitle] = useState(post?.title || '');
@@ -76,11 +89,13 @@ export const PostForm: React.FC<Props> = ({ onSubmit, post }) => {
     setHasTitleError(false);
     setHasUserIdError(false);
     setBodyErrorMessage('');
+
+    onReset();
   };
   // #endregion
 
   return (
-    <form 
+    <form
       action="/api/posts" 
       method="POST" 
       className="box"
@@ -99,6 +114,7 @@ export const PostForm: React.FC<Props> = ({ onSubmit, post }) => {
         })}>
           <input
             id="post-title"
+            ref={titleField}
             className={classNames('input', {
               'is-danger': hasTitleError
             })} 
