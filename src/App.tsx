@@ -1,5 +1,5 @@
 // #region imports 
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import { Post } from './types/Post';
 import { getMaxId, getPreparedPosts } from './services/posts';
@@ -9,6 +9,7 @@ import { PostList } from './components/PostList';
 
 export const App: React.FC = () => {
   // #region query
+  const [count, setCount] = useState(0);
   const [query, setQuery] = useState('');
 
   const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,12 +25,20 @@ export const App: React.FC = () => {
       id: getMaxId(posts) + 1,
     };
 
-    setPosts(currentPosts => [newPost, ...currentPosts]);
+    setPosts(currentPosts => [...currentPosts, newPost]);
   };
   // #endregion
 
+  const filteredPosts = useMemo(() => {
+    return posts.filter(post => post.title.includes(query));
+  }, [query, posts]);
+
   return (
     <div className="section py-5">
+      <button onClick={() => setCount(x => x + 1)}>
+        {count}
+      </button>
+
       <div className="columns is-mobile">
         <div className="column">
           <h1 className="title">Posts</h1>
@@ -45,8 +54,8 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      <PostList posts={posts} />
-      {/* <PostForm onSubmit={addPost} /> */}
+      <PostList posts={filteredPosts} />
+      <PostForm onSubmit={addPost} />
       </div>
   );
 };

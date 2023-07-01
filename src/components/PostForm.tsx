@@ -100,7 +100,7 @@ export const PostForm: React.FC<Props> = ({ onSubmit }) => {
               'is-danger': hasTitleError
             })} 
             type="text" 
-            placeholder="Email input" 
+            placeholder="Enter title" 
             value={title}
             onChange={handleTitleChange}
             onBlur={() => {
@@ -164,7 +164,7 @@ export const PostForm: React.FC<Props> = ({ onSubmit }) => {
             className={classNames('textarea', {
               'is-danger': bodyErrorMessage,
             })} 
-            placeholder="Add some text here"
+            placeholder="At least 5 characters"
             value={body}
             onChange={handleBodyChange}
           ></textarea>
