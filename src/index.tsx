@@ -1,11 +1,12 @@
 import { createRoot } from 'react-dom/client';
-import '@fortawesome/fontawesome-free/css/all.css';
-import 'bulma';
 import './index.scss';
 import { App } from './App';
+import { LangProvider } from './components/LangContext';
 
 const container = document.getElementById('root') as HTMLElement;
 
 createRoot(container).render(
-  <App />
+  <LangProvider>
+    <App />
+  </LangProvider>
 );
