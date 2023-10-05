@@ -5,11 +5,11 @@ import { LangContext } from './LangContext';
 type Props = {};
 
 export const LangSelector: React.FC<Props> = () => {
-  const { lang, setLang } = useContext(LangContext);
+  const {lang, setLang} = useContext(LangContext);
 
   return (
-    <select 
-      value={lang} 
+    <select
+      value={lang}
       onChange={event => {
         setLang(event.target.value as Lang);
       }}

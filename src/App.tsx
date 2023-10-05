@@ -1,13 +1,25 @@
+
 import { Footer } from './components/Footer';
-import { Header } from './components/Header';
-import { Main } from './components/Main';
+import { HomePage } from './components/HomePage';
+import { LangProvider } from './components/LangContext';
+import { LangSelector } from './components/LangSelector';
 
 export const App = () => {
   return (
     <div className="App">
-      <Header />
-      <Main />
-      <Footer />
+      <LangProvider>
+        <header className="header">
+          Mate academy
+
+          <LangSelector />
+        </header>
+
+        <main>
+          <HomePage />
+        </main>
+
+        <Footer />
+      </LangProvider>
     </div>
   );
 };
