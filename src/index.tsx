@@ -1,12 +1,12 @@
 import { createRoot } from 'react-dom/client';
 import './index.scss';
 import { App } from './App';
-import { LangProvider } from './components/LangContext';
+import { GlobalStateProvider } from './Store';
 
 const container = document.getElementById('root') as HTMLElement;
 
 createRoot(container).render(
-  <LangProvider>
-    <App />
-  </LangProvider>
+  <GlobalStateProvider>
+      <App />
+  </GlobalStateProvider>
 );
